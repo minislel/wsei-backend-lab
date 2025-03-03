@@ -1,4 +1,4 @@
-﻿@page "{quizId}/{itemId}"
+﻿@page "{quizId}/{userId}"
 @model BackendLab01.Pages.Summary
 @{
     ViewData["Title"] = "summary";
@@ -6,3 +6,6 @@
 }
 
 <H3>@ViewData["Title"]</H3>
+<h1>Summary</h1>
+<h3>Gratulacje! ukonczyłeś quiz</h3>
+<h3>Twój wynik to: @Model.correctAnswers/@Model.q.Items.Count</h3>

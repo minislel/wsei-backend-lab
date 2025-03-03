@@ -15,6 +15,7 @@
             <div class="form-check">
                 <input class="form-check-input" type="radio" value="@item" asp-for=@Model.UserAnswer/>
                 <label class="form-check-label" for="@item">@item</label>
+                <input type="hidden" asp-for="nextQuizItemId" />
             </div>
         }
     }

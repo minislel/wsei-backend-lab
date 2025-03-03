@@ -4,8 +4,18 @@ namespace BackendLab01.Pages;
 
 public class Summary : PageModel
 {
-    public void OnGet()
+    private readonly IQuizUserService _userService;
+
+    public BackendLab01.Quiz? q { get; private set; }
+    public int correctAnswers { get; set; }
+    
+    public Summary(IQuizUserService userService)
     {
-        
+        _userService = userService;
+    }
+    public void OnGet(int quizId, int userId)
+    {
+        q = _userService.FindQuizById(quizId);
+        correctAnswers = _userService.CountCorrectAnswersForQuizFilledByUser(quizId, userId);
     }
 }

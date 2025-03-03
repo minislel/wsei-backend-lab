@@ -28,13 +28,18 @@ namespace BackendLab01.Pages
         
         [BindProperty]
         public int ItemId { get; set; }
+        [BindProperty]
+
+        public int? nextQuizItemId { get; set; }
         
-        public void OnGet(int quizId, int itemId)
+        public IActionResult OnGet(int quizId, int itemId)
         {
             QuizId = quizId;
             ItemId = itemId;
+            
             var quiz = _userService.FindQuizById(quizId);
-            var quizItem = quiz?.Items[itemId - 1];
+			nextQuizItemId = itemId + 1 <= quiz.Items.Count ? itemId + 1 : null;
+			var quizItem = quiz?.Items[itemId - 1];
             Question = quizItem?.Question;
             Answers = new List<string>();
             if (quizItem is not null)
@@ -42,10 +47,15 @@ namespace BackendLab01.Pages
                 Answers.AddRange(quizItem?.IncorrectAnswers);
                 Answers.Add(quizItem?.CorrectAnswer);
             }
+            return Page();
         }
 
         public IActionResult OnPost()
         {
+            if (nextQuizItemId == null)
+            { 
+                return RedirectToPage("Summary", new { quizId = QuizId, userId = 1 });
+            }
             return RedirectToPage("Item", new {quizId = QuizId, itemId = ItemId + 1});
         }
     }
