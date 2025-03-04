@@ -30,8 +30,7 @@ namespace BackendLab01.Pages
         public int ItemId { get; set; }
         [BindProperty]
 
-        public int? nextQuizItemId { get; set; }
-        
+        public int? nextQuizItemId { get; set; }    
         public IActionResult OnGet(int quizId, int itemId)
         {
             QuizId = quizId;
@@ -39,7 +38,7 @@ namespace BackendLab01.Pages
             
             var quiz = _userService.FindQuizById(quizId);
 			nextQuizItemId = itemId + 1 <= quiz.Items.Count ? itemId + 1 : null;
-			var quizItem = quiz?.Items[itemId - 1];
+			var quizItem = quiz?.Items.Find(i => i.Id == itemId);
             Question = quizItem?.Question;
             Answers = new List<string>();
             if (quizItem is not null)
@@ -52,6 +51,7 @@ namespace BackendLab01.Pages
 
         public IActionResult OnPost()
         {
+            _userService.SaveUserAnswerForQuiz(QuizId, 1, ItemId, UserAnswer);
             if (nextQuizItemId == null)
             { 
                 return RedirectToPage("Summary", new { quizId = QuizId, userId = 1 });
